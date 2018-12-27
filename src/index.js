@@ -49,18 +49,20 @@ class Demo extends React.Component {
       const columns = this.state.columns
       const item = columns.splice(fromIndex, 1)[0]
       columns.splice(toIndex, 0, item)
-      console.log(columns)
       this.setState({ columns })
     },
     nodeSelector: 'th',
     handleSelector: 'th > div'
   }
 
-  handleResize(col) {
+  handleResize({ dataIndex }) {
     return (e, { size }) => {
       this.setState(({ columns }) => {
         const nextColumns = [...columns]
-        const index = columns.indexOf(col)
+        const index = columns.findIndex(
+          column => column.dataIndex === dataIndex
+        )
+
         nextColumns[index] = {
           ...nextColumns[index],
           width: size.width
@@ -81,7 +83,7 @@ class Demo extends React.Component {
       const onHeaderCell = column => {
         return {
           width: column.width,
-          onResize: this.handleResize.call(this, col),
+          onResize: this.handleResize.call(this, column),
           onResizeStart(_, data) {
             data.node.classList.add('dragging')
           },
