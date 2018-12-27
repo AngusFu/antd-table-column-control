@@ -33,6 +33,8 @@ const ResizeableTitle = props => {
   )
 }
 
+const getTableWidth = cols => cols.reduce((acc, col) => acc + col.width, 0)
+
 class Demo extends React.Component {
   components = {
     header: {
@@ -58,7 +60,11 @@ class Demo extends React.Component {
         ...nextColumns[index],
         width: size.width
       }
-      return { columns: nextColumns }
+
+      return {
+        columns: nextColumns,
+        tableWidth: getTableWidth(nextColumns)
+      }
     })
   }
 
@@ -66,6 +72,7 @@ class Demo extends React.Component {
     super(props)
 
     const resizePool = []
+
     const columns = columnConfig.map((col, index) => {
       const onHeaderCell = column => {
         resizePool[index] =
@@ -80,7 +87,8 @@ class Demo extends React.Component {
 
     this.state = {
       columns,
-      data: getData(100)
+      data: getData(100),
+      tableWidth: getTableWidth(columns)
     }
   }
 
@@ -94,7 +102,7 @@ class Demo extends React.Component {
             components={this.components}
             columns={this.state.columns}
             dataSource={this.state.data}
-            scroll={{ x: 1300 }}
+            scroll={{ x: this.state.tableWidth }}
           />
         </ReactDragListView.DragColumn>
       </div>
