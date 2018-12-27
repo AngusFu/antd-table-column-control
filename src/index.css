@@ -10,3 +10,21 @@
   right: -5px;
   cursor: col-resize;
 }
+
+.react-resizable-handle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  left: 4px;
+}
+
+.react-resizable-handle.dragging::before,
+.ant-table-thead > tr > th:hover .react-resizable-handle::before {
+  background: rgba(180, 180, 180, 0.4);
+}
+
+.ant-table-thead > tr > th:hover {
+  background: #f2f2f2;
+}

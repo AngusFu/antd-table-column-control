@@ -16,7 +16,7 @@ const defaultDraggbleOption = {
 }
 
 const ResizeableTitle = props => {
-  const { onResize, width, ...restProps } = props
+  const { width, onResize, onResizeStart, onResizeStop, ...restProps } = props
 
   if (!width) {
     return <th {...restProps} />
@@ -27,6 +27,8 @@ const ResizeableTitle = props => {
       height={0}
       width={width}
       onResize={onResize}
+      onResizeStart={onResizeStart}
+      onResizeStop={onResizeStop}
       draggableOpts={defaultDraggbleOption}>
       <th {...restProps} />
     </Resizable>
@@ -47,42 +49,48 @@ class Demo extends React.Component {
       const columns = this.state.columns
       const item = columns.splice(fromIndex, 1)[0]
       columns.splice(toIndex, 0, item)
+      console.log(columns)
       this.setState({ columns })
     },
     nodeSelector: 'th',
     handleSelector: 'th > div'
   }
 
-  handleResize = (index, e, { size }) => {
-    this.setState(({ columns }) => {
-      const nextColumns = [...columns]
-      nextColumns[index] = {
-        ...nextColumns[index],
-        width: size.width
-      }
+  handleResize(col) {
+    return (e, { size }) => {
+      this.setState(({ columns }) => {
+        const nextColumns = [...columns]
+        const index = columns.indexOf(col)
+        nextColumns[index] = {
+          ...nextColumns[index],
+          width: size.width
+        }
 
-      return {
-        columns: nextColumns,
-        tableWidth: getTableWidth(nextColumns)
-      }
-    })
+        return {
+          columns: nextColumns,
+          tableWidth: getTableWidth(nextColumns)
+        }
+      })
+    }
   }
 
   constructor(props) {
     super(props)
 
-    const resizePool = []
-
-    const columns = columnConfig.map((col, index) => {
+    const columns = columnConfig.map(col => {
       const onHeaderCell = column => {
-        resizePool[index] =
-          resizePool[index] || this.handleResize.bind(this, index)
         return {
           width: column.width,
-          onResize: resizePool[index]
+          onResize: this.handleResize.call(this, col),
+          onResizeStart(_, data) {
+            data.node.classList.add('dragging')
+          },
+          onResizeStop(_, data) {
+            data.node.classList.remove('dragging')
+          }
         }
       }
-      return { ...col, onHeaderCell }
+      return { ...col, align: 'center', onHeaderCell }
     })
 
     this.state = {
@@ -95,10 +103,9 @@ class Demo extends React.Component {
   render() {
     return (
       <div style={{ margin: 20 }}>
-        <h2>Table column with dragging</h2>
+        <p>Table column with dragging & resizing</p>
         <ReactDragListView.DragColumn {...this.dragProps}>
           <Table
-            bordered
             components={this.components}
             columns={this.state.columns}
             dataSource={this.state.data}
@@ -112,9 +119,9 @@ class Demo extends React.Component {
 
 ReactDOM.render(
   <div style={{ margin: 24 }}>
-    <h1 style={{ marginBottom: 24 }}>
+    <p style={{ marginBottom: 24 }}>
       Current antd version: {version} <br />
-    </h1>
+    </p>
     <Demo />
   </div>,
   document.getElementById('root')
