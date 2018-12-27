@@ -1,22 +1,10 @@
+
 {
   "dependencies": {
     "antd": "latest",
-    "moment": "2",
     "react": "latest",
     "react-dom": "latest",
-    "react-drag-listview": "0.1.3",
-    "react-resizable": "1.7.5"
-  },
-  "name": "antd3-table-with-columns-drag-and-drop",
-  "description": "columns d&d with https://github.com/raisezhang/react-drag-listview",
-  "version": "0.0.3",
-  "devDependencies": {
-    "react-scripts": "1.0.0"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "react-drag-listview": "latest",
+    "react-resizable": "latest"
   }
 }
