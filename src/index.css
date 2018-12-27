@@ -2,6 +2,7 @@
   position: relative;
 }
 
+/* this is the resize handle */
 .react-resizable-handle {
   position: absolute;
   width: 10px;
@@ -11,6 +12,7 @@
   cursor: col-resize;
 }
 
+/* set a indicator, since we chose table without borders */
 .react-resizable-handle::before {
   content: '';
   position: absolute;
@@ -18,13 +20,17 @@
   bottom: 0;
   width: 2px;
   left: 4px;
+  background: rgba(180, 180, 180, 0.4);
+  visibility: hidden;
 }
 
+/* show resize handle on dragging or hovering */
 .react-resizable-handle.dragging::before,
 .ant-table-thead > tr > th:hover .react-resizable-handle::before {
-  background: rgba(180, 180, 180, 0.4);
+  visibility: visible;
 }
 
+/* in order to indentify a thead cell's box size */
 .ant-table-thead > tr > th:hover {
   background: #f2f2f2;
 }

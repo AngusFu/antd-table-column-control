@@ -47,8 +47,8 @@ class Demo extends React.Component {
   dragProps = {
     onDragEnd: (fromIndex, toIndex) => {
       const columns = this.state.columns
-      const item = columns.splice(fromIndex, 1)[0]
-      columns.splice(toIndex, 0, item)
+      const item = columns.splice(fromIndex - 1, 1)[0]
+      columns.splice(toIndex - 1, 0, item)
       this.setState({ columns })
     },
     nodeSelector: 'th',
@@ -98,11 +98,23 @@ class Demo extends React.Component {
     this.state = {
       columns,
       data: getData(100),
-      tableWidth: getTableWidth(columns)
+      tableWidth: getTableWidth(columns),
+      selectedRowKeys: []
+    }
+
+    this.onSelectChange = selectedRowKeys => {
+      this.setState({ selectedRowKeys })
     }
   }
 
   render() {
+    const { selectedRowKeys } = this.state
+    const rowSelection = {
+      selectedRowKeys,
+      fixed: true,
+      onChange: this.onSelectChange,
+      hideDefaultSelections: true
+    }
     return (
       <div style={{ margin: 20 }}>
         <p>Table column with dragging & resizing</p>
@@ -112,6 +124,7 @@ class Demo extends React.Component {
             columns={this.state.columns}
             dataSource={this.state.data}
             scroll={{ x: this.state.tableWidth }}
+            rowSelection={rowSelection}
           />
         </ReactDragListView.DragColumn>
       </div>
