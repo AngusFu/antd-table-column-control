@@ -1,4 +1,3 @@
-
 {
   "dependencies": {
     "antd": "latest",
@@ -6,5 +5,8 @@
     "react-dom": "latest",
     "react-drag-listview": "latest",
     "react-resizable": "latest"
-  }
+  },
+  "keywords": [],
+  "name": "angusfu-antd-table-column-control",
+  "description": "react antd table header column resizing & reordering"
 }
